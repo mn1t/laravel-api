@@ -40,23 +40,22 @@ class PostController extends ApiController
     public function show(Post $post)
     {
         $this->authorize('view', $post);
-
         return $this->success(new ShowPostResource($post));
     }
 
     public function update(UpdatePostRequest $request, Post $post)
     {
         $this->authorize('update', $post);
-
         $post->update($request->all());
+
         return $this->success($post);
     }
 
     public function destroy(Request $request, Post $post,)
     {
         $this->authorize('delete', $post);
-
         $post->delete();
+        
         return $this->success();
     }
 }

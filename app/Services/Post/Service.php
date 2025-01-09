@@ -5,9 +5,20 @@ namespace App\Services\Post;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\Post;
+use App\Http\Api\Resources\PostResource;
 
 class Service
 {  
+    public function index($request) 
+    {
+       return [
+            $paginator = PostResource::collection(Post::orderByDesc('created_at')->paginate(10)), 
+            'page' => $paginator->currentPage(),
+            'last_page' => $paginator->lastPage(),
+            'total_posts' => $paginator->total(),
+        ];
+    }
+
     public function store($request) 
     {
         $request['user_id'] = $request->user()->id;

@@ -5,8 +5,6 @@ namespace App\Http\Api\Controllers;
 use App\Http\Api\Controllers\ApiController;
 use App\Http\Api\Resources\ShowPostResource;
 use App\Models\Post;
-use App\Http\Api\Resources\PostResource;
-use DB;
 use Illuminate\Http\Request;
 use App\Http\Api\Requests\StorePostRequest;
 use App\Http\Api\Requests\UpdatePostRequest;
@@ -28,7 +26,7 @@ class PostController extends ApiController
     public function index(Request $request)
     {
         $this->authorize('viewAny', Post::class);
-        return $this->success(PostResource::collection(Post::orderByDesc('created_at')->paginate(10)));
+        return $this->success($this->service->index($request));
     }
 
     public function store(StorePostRequest $request)

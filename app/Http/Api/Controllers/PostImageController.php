@@ -4,16 +4,19 @@ namespace App\Http\Api\Controllers;
 
 use App\Exceptions\ApiException;
 use App\Http\Api\Requests\StorePostImageRequest;
-use App\Models\Post;
+use App\Services\Post\Service;
 
 class PostImageController extends ApiController
 {
-    public function store(StorePostImageRequest $request, $post){
-    
-        if(request()->exists('img')){
-            $request['image'] = $request->file('img')->store('post_images');
-        }
-        
-        return $this->success(Post::find($post)->update($request->all()));
+    public $service;
+
+    public function __construct(Service $service)
+    {
+        $this->service = $service;
+    }
+
+    public function store(StorePostImageRequest $request, $post)
+    {
+        return $this->success($this->service->storeImage($request, $post));
     }
 }

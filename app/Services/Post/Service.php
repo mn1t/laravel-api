@@ -22,5 +22,13 @@ class Service
         }));
     }
 
-
+    public function storeImage($request, $post)
+    {
+        if($request->user()->id === Post::find($post)->user_id){
+                $request['image'] = $request->file('img')->store('post_images');
+                return Post::find($post)->update($request->all());
+        }
+        
+        return 'Доступно только автору поста';
+    }
 }

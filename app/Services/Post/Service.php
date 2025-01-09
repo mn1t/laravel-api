@@ -12,7 +12,7 @@ class Service
     public function index($request) 
     {
        return [
-            $paginator = PostResource::collection(Post::orderByDesc('created_at')->paginate(10)), 
+            $paginator = PostResource::collection(Post::latest()->paginate(10)), 
             'page' => $paginator->currentPage(),
             'last_page' => $paginator->lastPage(),
             'total_posts' => $paginator->total(),

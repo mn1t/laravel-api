@@ -2,6 +2,7 @@
 
 namespace App\Services\Post;
 
+use App\Models\PostUserLike;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\Post;
@@ -41,5 +42,25 @@ class Service
         }
         
         return 'Доступно только автору поста';
+    }
+
+    public function like($request, $post)
+    {
+        if($like = PostUserLike::where('post_id', $post)->where('user_id', $request->user()->id)->first()){
+            
+            $like->delete();
+            return 'unliked';
+
+        } else {
+
+            PostUserLike::create([
+                'post_id' => $request->post,
+                'user_id' => $request->user()->id,
+            ]);
+    
+            return 'liked';
+        }
+
+       
     }
 }

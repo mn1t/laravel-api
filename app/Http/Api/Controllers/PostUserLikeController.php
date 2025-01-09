@@ -3,22 +3,19 @@
 namespace App\Http\Api\Controllers;
 
 use App\Http\Api\Controllers\ApiController;
-use App\Models\PostUserLike;
 use Illuminate\Http\Request;
+use App\Services\Post\Service;
 
 class PostUserLikeController extends ApiController
 {
+    public $service;
+    public function __construct(Service $service)
+    {
+        $this->service = $service;
+    }
+
     public function __invoke(Request $request, $post)
     {
-        if($like = PostUserLike::where('post_id', $post)->where('user_id', $request->user()->id)->first()){
-            $like->delete();
-            return $this->success('unliked');
-        }
-
-        PostUserLike::create([
-            'post_id' => $request->post,
-            'user_id' => $request->user()->id,
-        ]);
-        return $this->success('liked');
+        return $this->success($this->service->like($request, $post));
     }
 }
